@@ -25,3 +25,37 @@ body {
     text-wrap: balance;
   }
 }
+
+/* Monster container for positioning */
+.monster-container {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+/* Style for the monster image */
+.monster-img {
+  width: 150px;
+  height: auto;
+  cursor: pointer;
+}
+
+/* Health bar container */
+.health-bar {
+  width: 100%;
+  height: 15px;
+  background-color: #ccc; /* Gray background for health bar */
+  border-radius: 9999px;
+  overflow: hidden;
+  margin: 10px auto;
+  position: relative;
+  max-width: 300px; /* Adjust to fit your layout */
+}
+
+/* Inner health bar that shrinks as health decreases */
+.health-bar-inner {
+  height: 100%;
+  background-color: darkred; /* Green for the health bar */
+  border-radius: 10px;
+  transition: width 0.3s ease-in-out; /* Smooth width transition */
+}
+
