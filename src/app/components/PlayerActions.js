@@ -1,14 +1,23 @@
 import React from "react";
+import Monster from "./Monster";
 
-function PlayerActions() {
-  const [gold, setGold] = useState(0);
-
-  function handleAttack() {}
+function PlayerActions({
+  gold,
+  setGold,
+  monsterHealth,
+  handleClick,
+  damagePerClick,
+}) {
+  function handleAttack() {
+    handleClick(damagePerClick);
+  }
 
   return (
     <>
-      <p>{gold}</p>
-      <button onClick={handleAttack}>Attack </button>
+      <p>Gold: {gold}</p>
+      <button onClick={handleAttack}>
+        Attack (Damage per Click: {damagePerClick})
+      </button>
     </>
   );
 }

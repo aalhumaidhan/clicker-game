@@ -2,15 +2,18 @@
 
 import React from "react";
 import Image from "next/image";
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import PlayerActions from "./PlayerActions";
 
-function Monster() {
+function Monster({ damagePerClick, setGold, gold }) {
   const [monsterHealth, setMonsterHealth] = useState(100);
   const [maxHealth, setMaxHealth] = useState(100);
 
   function handleClick(damage) {
     setMonsterHealth((prev) => Math.max(prev - damage, 0));
+    if (monsterHealth - damage <= 0) {
+      setGold((prev) => prev + 50);
+    }
   }
 
   useEffect(() => {
@@ -45,7 +48,7 @@ function Monster() {
           className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 cursor-pointer"
           target="_blank"
           rel="noopener noreferrer"
-          onClick={() => handleClick(10)}
+          onClick={() => handleClick(damagePerClick)}
         >
           <Image
             className="light:invert"
@@ -56,6 +59,7 @@ function Monster() {
           />
           Kill the Monster!
         </a>
+        <p>Gold: {gold}</p>
       </div>
     </div>
   );
