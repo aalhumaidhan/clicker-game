@@ -1,62 +1,80 @@
 import React from "react";
 import { useState } from "react";
 import Home from "../page";
+import Upgrades from "./Upgrades";
+import Monster from "./Monster";
 
-function Tools({ damagePerClick, setDamagePerClick }) {
-  const [selectedTool, setSelectedTool] = useState(null);
-
-  const tools = [
+function Tools({
+  damagePerClick,
+  setDamagePerClick,
+  gold,
+  setGold,
+  monsterHealth,
+  setMonsterHealth,
+}) {
+  const [selectedTool, setSelectedTool] = useState([
     {
       name: "Sword",
       description: "A sword that slashes the monsters and deals more damage!",
-      damage: 25,
+      damage: 2.5,
+      cost: 1500,
+    },
+    {
       name: "Ray Gun",
       description:
         "A ray gun that shoots laser beams and blinds the monster momentarily!",
-      damage: 50,
+      damage: 5,
+      cost: 5000,
+    },
+    {
       name: "Flamethrower",
       description: "A flamethrower, the name speaks for itself!",
-      damage: 100,
+      damage: 10,
+      cost: 10000,
     },
-  ];
+  ]);
 
-  function handleTool(tool) {
-    setSelectedTool(tool);
-    setDamagePerClick(tool.damage);
+  function scaleMonsterHealth(newDamagePerClick) {
+    const scalingFactor = 1 + Math.log2(newDamagePerClick / 10);
+    const increasedHealth = Math.floor(monsterHealth * scalingFactor);
+    setMonsterHealth(increasedHealth);
   }
-  return (
-    <div className="upgrade-options-container p-4 border rounded-lg shadow-md max-w-md text-center">
-    <h2 className="text-2xl font-bold mb-4">Get ready to supercharge your game!</h2>
-    <p className="mb-6 text-gray-700">
-      Players can spend their hard-earned currency to unlock upgrades that make their clicks more powerful, reduce costs
-    </p>
 
-    <div className="tool-selection">
-      <h3 className="text-xl font-semibold mb-3">Choose your tool to raid the monster:</h3>
-      <div className="grid grid-cols-1 gap-4">
-        {tools.map((tool) => (
-          <div
-            key={tool.name}
-            className={tool-item p-3 border rounded-lg cursor-pointer hover:bg-gray-200 ${
-              ...selectedTool.name === tool.name ? "bg-green-200" : "";
-            }
-            onClick={() => handleTool(tool)}
+  function handleToolUpgrade(toolIndex) {
+    const toolUpgrade = selectedTool[toolIndex];
+
+    if (gold >= toolUpgrade.cost) {
+      setGold(gold - toolUpgrade.cost);
+      const newDamagePerClick = Math.floor(damagePerClick * toolUpgrade.damage);
+      setDamagePerClick(newDamagePerClick);
+      scaleMonsterHealth(newDamagePerClick);
+    } else {
+      alert("Not enough gold to buy this upgrade!");
+    }
+  }
+
+  return (
+    <div className="upgrades flex-shrink flex-grow-0">
+      <p className="font-semibold text-center text-3xl mb-5">Tool Upgrades </p>
+      <ul className="flex flex-col gap-4">
+        {selectedTool.map((tool, index) => (
+          <li
+            key={index}
+            className="bg-zinc-800 p-4 flex gap-2 flex-col rounded-2xl flex-wrap w-96 justify-center items-start"
           >
-            <h4 className="font-bold">{tool.name}</h4>
-            <p className="text-gray-600">{tool.description}</p>
-            <p className="text-sm">Damage: {tool.damage}</p>
-          </div>
+            {tool.name}: {tool.description}
+            <div className="text-amber-400 font-semibold">{tool.cost} Gold</div>
+            <button
+              onClick={() => handleToolUpgrade(index)}
+              className="bg-green-500 px-10 py-1 hover:bg-green-400 rounded-full self-end font-semibold
+            "
+            >
+              Purchase
+            </button>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
-    {selectedTool && (
-      <div className="mt-4 p-2 text-sm text-green-800 bg-green-100 rounded">
-        You've selected the <strong>{selectedTool.name}</strong> with a damage of <strong>{selectedTool.damage}</strong>!
-      </div>
-    )}
-  </div>
-  
-  
   );
 }
 
